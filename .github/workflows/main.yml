@@ -1,0 +1,25 @@
+  
+name: Docker Image CI
+
+on: [push]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        php: [7.1,7.2,7.3]
+    steps:
+    - uses: actions/checkout@v1
+    - name: enable experimental features
+      run: "sudo mkdir -p /etc/docker && echo '{\"experimental\": true}' | sudo tee /etc/docker/daemon.json"
+    - name: enable experimental features on client
+      run: "mkdir -p ~/.docker && echo '{\"experimental\": \"enabled\"}' | tee ~/.docker/config.json"
+    - name: service restart
+      run: sudo service docker restart   
+    - name: Build the OXID Docker image
+      run: docker build . --squash --file Dockerfile --build-arg PHP=${{ matrix.php }} --build-arg OXID=${{ matrix.oxid }} --tag oxidprojects/oxid-apache-php:php${{ matrix.php }}
+    - name: Docker Login
+      run: docker login -u ${{ secrets.DOCKER_HUB_USER }} -p ${{ secrets.DOCKER_HUB_PASSWORD }}
+    - name: Publish oxid php${{ matrix.php }} Docker image on Docker Hub
+      run: docker push oxidprojects/oxid-apache-php:php${{ matrix.php }}
