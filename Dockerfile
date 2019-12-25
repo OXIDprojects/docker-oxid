@@ -2,12 +2,11 @@
 ARG PHP=7.1
 FROM php:$PHP-apache
 
-ARG ansibleDeps="python3-pip "
 ARG libs="libfreetype6 libjpeg62-turbo liblz4-tool"
 ARG remoteTools="rsync wget openssh-client"
 ARG fontTools="fontforge ttfautohint"
 ARG editors="less nano"
-ARG tools="$editors $fontTools $remoteTools nvi iproute2 ack-grep unzip git default-mysql-client sudo npm make"
+ARG tools="$editors $fontTools $remoteTools python3-pip nvi iproute2 ack-grep unzip git default-mysql-client sudo npm make"
 ARG RUNTIME_PACKAGE_DEPS="$tools msmtp bc locales"
 
 ARG BUILD_PACKAGE_DEPS="libcurl4-openssl-dev libjpeg-dev libpng-dev libxml2-dev"
