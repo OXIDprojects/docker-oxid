@@ -2,8 +2,15 @@
 ARG PHP=7.1
 FROM php:$PHP-apache
 
-ARG RUNTIME_PACKAGE_DEPS="wget less nano nvi locales openssh-client iproute2 ack-grep msmtp libfreetype6 libjpeg62-turbo unzip git default-mysql-client sudo rsync liblz4-tool bc"
+ARG libs="libfreetype6 libjpeg62-turbo liblz4-tool"
+ARG remoteTools="rsync wget openssh-client"
+ARG fontTools="fontforge ttfautohint"
+ARG editors="less nano"
+ARG tools="$editors $fontTools $remoteTools python3-pip nvi iproute2 ack-grep unzip git default-mysql-client sudo npm make"
+ARG RUNTIME_PACKAGE_DEPS="$tools msmtp bc locales"
+
 ARG BUILD_PACKAGE_DEPS="libcurl4-openssl-dev libjpeg-dev libpng-dev libxml2-dev"
+
 ARG PHP_EXT_DEPS="curl json xml mbstring zip bcmath soap pdo_mysql gd mysqli"
 ARG PECL_DEPS="xdebug"
 ARG PHP_MEMORY_LIMIT="-1"
@@ -21,6 +28,17 @@ RUN apt-get update -y \
     && apt-get autoremove -y \
     && apt-get purge -y --auto-remove $BUILD_PACKAGE_DEPS \
     && rm -rf /var/lib/apt/lists/*
+
+RUN sed -i 's/^# *\(en_US.UTF-8\)/\1/' /etc/locale.gen && \
+    dpkg-reconfigure --frontend=noninteractive locales && \
+    update-locale LANG=en_US.UTF-8
+ENV LANG en_US.UTF-8
+ENV LANGUAGE en_US:en
+ENV LC_ALL en_US.UTF-8
+
+#install dependencies
+RUN pip3 install wheel PyMySQL setuptools boto
+RUN pip3 install ansible awscli
 
 # set sendmail for php to msmtp
 RUN echo "sendmail_path=/usr/bin/msmtp -t" > /usr/local/etc/php/conf.d/php-sendmail.ini
