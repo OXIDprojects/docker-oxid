@@ -43,6 +43,8 @@ RUN pip3 install ansible awscli
 
 # set sendmail for php to msmtp
 RUN echo "sendmail_path=/usr/bin/msmtp -t" > /usr/local/etc/php/conf.d/php-sendmail.ini
+RUN echo "msmtp.log init" > /var/log/msmtp.log
+RUN chmod 777 /var/log/msmtp.log
 
 # remove memory limit
 RUN echo "memory_limit = $PHP_MEMORY_LIMIT" > /usr/local/etc/php/conf.d/memory-limit-php.ini
