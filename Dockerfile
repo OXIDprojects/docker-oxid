@@ -42,7 +42,7 @@ RUN pip3 install wheel PyMySQL setuptools boto
 RUN pip3 install ansible awscli
 
 # set sendmail for php to msmtp
-RUN echo "sendmail_path=/usr/bin/msmtp -t" > /usr/local/etc/php/conf.d/php-sendmail.ini
+RUN echo "sendmail_path=/usr/bin/msmtp -t" > /usr/local/etc/php/conf.d/20-sendmail.ini
 RUN echo "msmtp.log init" > /var/log/msmtp.log
 RUN chmod 777 /var/log/msmtp.log
 
@@ -50,9 +50,8 @@ RUN chmod 777 /var/log/msmtp.log
 RUN echo "memory_limit = $PHP_MEMORY_LIMIT" > /usr/local/etc/php/conf.d/memory-limit-php.ini
 
 # prepare optional xdebug ini
-RUN echo "zend_extension=$(find /usr/local/lib/php/extensions/ -name xdebug.so)" > /usr/optional_xdebug.ini && \
-    echo "xdebug.remote_enable=on" >> /usr/optional_xdebug.ini && \
-    echo "xdebug.remote_autostart=off" >> /usr/optional_xdebug.ini
+#RUN echo "xdebug.remote_enable=on" >> /usr/optional_xdebug.ini && \
+RUN echo "xdebug.remote_autostart=off" >> /usr/local/etc/php/conf.d/20-xdebug.ini
 
 # add symlink to provide php also from /usr/bin
 RUN ln -s /usr/local/bin/php /usr/bin/php
