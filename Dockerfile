@@ -72,7 +72,12 @@ RUN a2enmod rewrite
 
 #lower security for developer environment
 RUN sed -i "s/ ALL$/ NOPASSWD:ALL/" /etc/sudoers
-RUN sed -i -e "s/UMASK[[:space:]]\{1,\}022$/UMASK 000/" /etc/login.defs
+#setting the umask systemwide does not work in debian based docker image for some reason
+#e.g. will have no effectRUN sed -i -e "s/UMASK[[:space:]]\{1,\}022$/UMASK 000/" /etc/login.defs
+#so setting the umask for the webserver 
+RUN sed -i '2s/^/umask 000\n /' /usr/local/bin/apache2-foreground
+#and for developers that using a bash
+RUN echo umask 000 >> /root/.bashrc
 
 # timezone / date
 # use berlin because a lot of oxid customers are from germany
