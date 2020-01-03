@@ -6,7 +6,7 @@ ARG libs="libfreetype6 libjpeg62-turbo liblz4-tool libjudy-dev"
 ARG remoteTools="rsync wget openssh-client"
 ARG fontTools="fontforge ttfautohint"
 ARG editors="less nano"
-ARG tools="$editors $fontTools $remoteTools python3-pip nvi iproute2 ack-grep unzip git default-mysql-client sudo npm make"
+ARG tools="$editors $fontTools $remoteTools python3-pip nvi iproute2 ack-grep unzip git default-mysql-client sudo npm make socat"
 ARG RUNTIME_PACKAGE_DEPS="$libs $tools msmtp bc locales"
 
 ARG BUILD_PACKAGE_DEPS="libcurl4-openssl-dev libjpeg-dev libpng-dev libxml2-dev"
