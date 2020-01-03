@@ -74,3 +74,8 @@ RUN a2enmod rewrite
 RUN sed -i "s/ ALL$/ NOPASSWD:ALL/" /etc/sudoers
 RUN sed -i "s/UMASK           022$/UMASK           000/" /etc/login.defs
 
+# timezone / date
+# use berlin because a lot of oxid customers are from germany
+# do not rely on this setting it may be changed in fututre
+RUN ln -snf /usr/share/zoneinfo/Europe/Berlin /etc/localtime && echo Europe/Berlin > /etc/timezone
+RUN echo date.timezone = Europe/Berlin >> /usr/local/etc/php/conf.d/timezone.ini
