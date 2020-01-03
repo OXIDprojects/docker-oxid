@@ -69,3 +69,8 @@ RUN composer global require hirak/prestissimo
 RUN sed -i -e "s#/var/www/html#/var/www/oxideshop/source#g" /etc/apache2/sites-enabled/000-default.conf
 RUN sed -i -e "s/AllowOverride None/AllowOverride All/g" /etc/apache2/apache2.conf
 RUN a2enmod rewrite
+
+#lower security for developer environment
+RUN sed -i "s/ ALL$/ NOPASSWD:ALL/" /etc/sudoers
+RUN sed -i "s/UMASK           022$/UMASK           000/" /etc/login.defs
+
