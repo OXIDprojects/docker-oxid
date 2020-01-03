@@ -56,7 +56,7 @@ RUN echo "xdebug.remote_autostart=off" >> /usr/local/etc/php/conf.d/20-xdebug.in
 # add symlink to provide php also from /usr/bin
 RUN ln -s /usr/local/bin/php /usr/bin/php
 
-WORKDIR /var/www/oxid
+WORKDIR /var/www/oxideshop
 
 # install latest composer
 RUN curl --silent --show-error https://getcomposer.org/installer | php && \
