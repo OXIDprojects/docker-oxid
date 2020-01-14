@@ -49,10 +49,6 @@ RUN chmod 777 /var/log/msmtp.log
 # remove memory limit
 RUN echo "memory_limit = $PHP_MEMORY_LIMIT" > /usr/local/etc/php/conf.d/memory-limit-php.ini
 
-# prepare optional xdebug ini
-#RUN echo "xdebug.remote_enable=on" >> /usr/optional_xdebug.ini && \
-RUN echo "xdebug.remote_autostart=off" >> /usr/local/etc/php/conf.d/20-xdebug.ini
-
 # add symlink to provide php also from /usr/bin
 RUN ln -s /usr/local/bin/php /usr/bin/php
 
