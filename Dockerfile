@@ -80,3 +80,5 @@ RUN echo umask 000 >> /root/.bashrc
 # do not rely on this setting it may be changed in fututre
 RUN ln -snf /usr/share/zoneinfo/Europe/Berlin /etc/localtime && echo Europe/Berlin > /etc/timezone
 RUN echo date.timezone = Europe/Berlin >> /usr/local/etc/php/conf.d/timezone.ini
+
+COPY scripts/* /usr/local/bin/
