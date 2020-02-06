@@ -6,14 +6,19 @@ ARG libs="libfreetype6 libjpeg62-turbo liblz4-tool libjudy-dev"
 ARG remoteTools="rsync wget openssh-client"
 ARG fontTools="fontforge ttfautohint"
 ARG editors="less nano"
-ARG tools="$editors $fontTools $remoteTools python3-pip nvi iproute2 ack-grep unzip git default-mysql-client sudo npm make socat dnsutils iputils-ping netcat"
+ARG tools="$editors $fontTools $remoteTools python3-pip nvi iproute2 ack-grep unzip git default-mysql-client sudo make socat dnsutils iputils-ping netcat"
 ARG RUNTIME_PACKAGE_DEPS="$libs $tools msmtp bc locales"
 
 ARG BUILD_PACKAGE_DEPS="libcurl4-openssl-dev libjpeg-dev libpng-dev libxml2-dev"
 
 ARG PHP_EXT_DEPS="curl json xml mbstring zip bcmath soap pdo_mysql gd mysqli"
-ARG PECL_DEPS="xdebug memprof"
+ARG PECL_DEPS="memprof"
 ARG PHP_MEMORY_LIMIT="-1"
+
+RUN ln -s /usr/local/etc/php/php.ini-development /usr/local/etc/php/php.ini
+
+RUN test "$PHP" = "7.0" || pecl install xdebug-2.8.1
+RUN test "$PHP" != "7.0" || pecl install xdebug
 
 # install dependencies and cleanup (needs to be one step, as else it will cache in the layer)
 RUN apt-get update -y \
@@ -82,3 +87,7 @@ RUN ln -snf /usr/share/zoneinfo/Europe/Berlin /etc/localtime && echo Europe/Berl
 RUN echo date.timezone = Europe/Berlin >> /usr/local/etc/php/conf.d/timezone.ini
 
 COPY scripts/* /usr/local/bin/
+
+#for php < 7.1. container node must be installed that way:
+RUN curl -sL https://deb.nodesource.com/setup_13.x | bash -
+RUN apt-get install -y nodejs
