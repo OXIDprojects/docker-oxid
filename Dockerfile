@@ -12,13 +12,14 @@ ARG RUNTIME_PACKAGE_DEPS="$libs $tools msmtp bc locales"
 ARG BUILD_PACKAGE_DEPS="libcurl4-openssl-dev libjpeg-dev libpng-dev libxml2-dev"
 
 ARG PHP_EXT_DEPS="curl json xml mbstring zip bcmath soap pdo_mysql gd mysqli"
-ARG PECL_DEPS="memprof"
+ARG PECL_DEPS="memprof xdebug"
 ARG PHP_MEMORY_LIMIT="-1"
 
 RUN ln -s /usr/local/etc/php/php.ini-development /usr/local/etc/php/php.ini
 
 RUN test "$PHP" = "7.0" || pecl install xdebug-2.8.1
 RUN test "$PHP" != "7.0" || pecl install xdebug
+RUN docker-php-ext-enable xdebug
 
 # install dependencies and cleanup (needs to be one step, as else it will cache in the layer)
 RUN apt-get update -y \
