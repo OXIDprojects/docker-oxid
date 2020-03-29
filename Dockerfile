@@ -74,6 +74,7 @@ RUN a2enmod rewrite
 
 #lower security for developer environment
 RUN sed -i "s/ ALL$/ NOPASSWD:ALL/" /etc/sudoers
+RUN usermod -aG sudo www-data
 #setting the umask systemwide does not work in debian based docker image for some reason
 #e.g. will have no effectRUN sed -i -e "s/UMASK[[:space:]]\{1,\}022$/UMASK 000/" /etc/login.defs
 #so setting the umask for the webserver 
