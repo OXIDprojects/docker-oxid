@@ -12,7 +12,7 @@ ARG RUNTIME_PACKAGE_DEPS="$libs $tools msmtp bc locales"
 ARG BUILD_PACKAGE_DEPS="libcurl4-openssl-dev libjpeg-dev libpng-dev libxml2-dev libzip-dev libssh2-1-dev"
 
 ARG PHP_EXT_DEPS="curl json xml mbstring zip bcmath soap pdo_mysql gd mysqli "
-ARG PECL_DEPS="memprof xdebug ssh2-1.2"
+ARG PECL_DEPS="memprof ssh2-1.2"
 ARG PHP_MEMORY_LIMIT="-1"
 
 RUN ln -s /usr/local/etc/php/php.ini-development /usr/local/etc/php/php.ini
@@ -28,7 +28,7 @@ RUN apt-get update -y \
         $BUILD_PACKAGE_DEPS \
     && docker-php-ext-configure gd --with-jpeg-dir=/usr/local/ \
     && docker-php-ext-install -j$(nproc) $PHP_EXT_DEPS \
-    && pecl install $PECL_DEPS \
+    && pecl install $PECL_DEPS <<<'' \
     && docker-php-ext-enable $PECL_DEPS \
     && docker-php-source delete \
     && apt-get clean \
