@@ -11,7 +11,7 @@ ARG RUNTIME_PACKAGE_DEPS="$libs $tools msmtp bc locales"
 
 ARG BUILD_PACKAGE_DEPS="libcurl4-openssl-dev libjpeg-dev libpng-dev libxml2-dev libzip-dev"
 
-ARG PHP_EXT_DEPS="curl json xml mbstring zip bcmath soap pdo_mysql gd mysqli"
+ARG PHP_EXT_DEPS="curl json xml mbstring libonig-dev zip bcmath soap pdo_mysql gd mysqli"
 ARG PECL_DEPS="memprof xdebug"
 ARG PHP_MEMORY_LIMIT="-1"
 
