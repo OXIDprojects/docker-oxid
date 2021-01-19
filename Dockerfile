@@ -1,5 +1,5 @@
   
-ARG PHP=7.1
+ARG PHP=7.4
 FROM php:$PHP-apache
 #libs: libjudy-dev need this for memprof
 ARG libs="libfreetype6 libjpeg62-turbo liblz4-tool libjudy-dev"
@@ -22,7 +22,21 @@ RUN test "$PHP" != "7.0" || pecl install xdebug
 RUN docker-php-ext-enable xdebug
 
 # install dependencies and cleanup (needs to be one step, as else it will cache in the layer)
-RUN apt-get update -y \
+RUN test "$PHP" = "7.4" || apt-get update -y \
+    && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
+        $RUNTIME_PACKAGE_DEPS \
+        $BUILD_PACKAGE_DEPS \
+    && docker-php-ext-configure gd \
+    && docker-php-ext-install -j$(nproc) $PHP_EXT_DEPS \
+    && pecl install $PECL_DEPS \
+    && docker-php-ext-enable $PECL_DEPS \
+    && docker-php-source delete \
+    && apt-get clean \
+    && apt-get autoremove -y \
+    && apt-get purge -y --auto-remove $BUILD_PACKAGE_DEPS \
+    && rm -rf /var/lib/apt/lists/*
+
+RUN test "$PHP" != "7.4" || apt-get update -y \
     && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
         $RUNTIME_PACKAGE_DEPS \
         $BUILD_PACKAGE_DEPS \
