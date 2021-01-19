@@ -23,7 +23,7 @@ RUN docker-php-ext-enable xdebug
 
 # install dependencies and cleanup (needs to be one step, as else it will cache in the layer)
 RUN test "$PHP" = "7.4" || apt-get update -y \
-    && DEBIAN_FRONTEND=noninteractive apt-get install -f -y --no-install-recommends \
+    && DEBIAN_FRONTEND=noninteractive apt-get install -yf \
         $RUNTIME_PACKAGE_DEPS \
         $BUILD_PACKAGE_DEPS \
     && docker-php-ext-configure gd \
