@@ -9,7 +9,7 @@ ARG editors="less nano"
 ARG tools="$editors $fontTools $remoteTools python3-pip nvi iproute2 ack-grep unzip git default-mysql-client sudo make socat dnsutils iputils-ping netcat"
 ARG RUNTIME_PACKAGE_DEPS="$libs $tools msmtp bc locales"
 
-ARG BUILD_PACKAGE_DEPS="libcurl4-openssl-dev libjpeg-dev libpng-dev libxml2-dev libzip-dev"
+ARG BUILD_PACKAGE_DEPS="libcurl4-openssl-dev libjpeg-dev libpng-dev libxml2-dev"
 
 ARG PHP_EXT_DEPS="curl json xml mbstring zip bcmath soap pdo_mysql gd mysqli"
 ARG PECL_DEPS="memprof xdebug"
