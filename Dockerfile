@@ -9,7 +9,7 @@ ARG editors="less nano"
 ARG tools="$editors $fontTools $remoteTools python3-pip nvi iproute2 ack-grep unzip git default-mysql-client sudo make socat dnsutils iputils-ping netcat"
 ARG RUNTIME_PACKAGE_DEPS="$libs $tools msmtp bc locales"
 
-ARG BUILD_PACKAGE_DEPS="libcurl4-openssl-dev libjpeg-dev libpng-dev libxml2-dev libzip-dev"
+ARG BUILD_PACKAGE_DEPS="libcurl4-openssl-dev libjpeg-dev libpng-dev libxml2-dev libzip-dev libonig-dev"
 
 ARG PHP_EXT_DEPS="curl json xml mbstring zip bcmath soap pdo_mysql gd mysqli"
 ARG PECL_DEPS="memprof xdebug"
@@ -26,7 +26,7 @@ RUN apt-get update -y \
     && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
         $RUNTIME_PACKAGE_DEPS \
         $BUILD_PACKAGE_DEPS \
-    && docker-php-ext-configure gd --with-jpeg-dir=/usr/local/ \
+    && docker-php-ext-configure gd --with-jpeg \
     && docker-php-ext-install -j$(nproc) $PHP_EXT_DEPS \
     && pecl install $PECL_DEPS \
     && docker-php-ext-enable $PECL_DEPS \
