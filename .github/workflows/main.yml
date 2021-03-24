@@ -35,7 +35,7 @@ jobs:
     - name: run the image for testing in background
       run: docker run --name oxid -d oxidprojects/oxid-apache-php:php${{ steps.extract_branch.outputs.branch }}-${{ matrix.php }}
     - name: test image
-      run: docker exec --name oxid -d oxidprojects/oxid-apache-php:php${{ steps.extract_branch.outputs.branch }}-${{ matrix.php }} composer -v
+      run: docker exec --name oxid oxidprojects/oxid-apache-php:php${{ steps.extract_branch.outputs.branch }}-${{ matrix.php }} composer -v
     - name: Docker Login
       run: docker login -u ${{ secrets.DOCKER_HUB_USER }} -p ${{ secrets.DOCKER_HUB_PASSWORD }}
     - name: Publish oxid php${{ matrix.php }} Docker image on Docker Hub
