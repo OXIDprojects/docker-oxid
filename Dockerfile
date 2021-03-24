@@ -15,8 +15,6 @@ ARG PECL_DEPS="memprof xdebug"
 ARG PHP_MEMORY_LIMIT="-1"
 
 
-RUN curl https://sh.rustup.rs -sSf | sh -s -- -y
-
 RUN ln -s /usr/local/etc/php/php.ini-development /usr/local/etc/php/php.ini
 
 RUN test "$PHP" = "7.0" || pecl install xdebug-2.8.1 # 2.9.8 available
