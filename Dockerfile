@@ -1,27 +1,25 @@
-  
 ARG PHP=7.1
 FROM php:$PHP-apache
 #libs: libjudy-dev need this for memprof
-ARG libs="libfreetype6 libjpeg62-turbo liblz4-tool libjudy-dev"
+ARG libs="libfreetype6 libjpeg62-turbo liblz4-tool libjudy-dev python3-dev libzip4"
 ARG remoteTools="rsync wget openssh-client"
 ARG fontTools="fontforge ttfautohint"
 ARG editors="less nano"
-ARG tools="$editors $fontTools $remoteTools python3-pip nvi iproute2 ack-grep unzip git default-mysql-client sudo make socat dnsutils iputils-ping netcat"
+ARG tools="$editors $fontTools $remoteTools ansible python3-pip nvi iproute2 ack-grep unzip git default-mysql-client sudo make socat dnsutils iputils-ping netcat"
 ARG RUNTIME_PACKAGE_DEPS="$libs $tools msmtp bc locales"
 
-ARG BUILD_PACKAGE_DEPS="libcurl4-openssl-dev libjpeg-dev libpng-dev libxml2-dev libzip-dev"
+ARG BUILD_PACKAGE_DEPS="libzip-dev libcurl4-openssl-dev libjpeg-dev libpng-dev libxml2-dev  libonig-dev libssl-dev"
 
 ARG PHP_EXT_DEPS="curl json xml mbstring zip bcmath soap pdo_mysql gd mysqli"
 ARG PECL_DEPS="memprof xdebug"
 ARG PHP_MEMORY_LIMIT="-1"
 
 
-RUN curl https://sh.rustup.rs -sSf | sh -s -- -y
-
 RUN ln -s /usr/local/etc/php/php.ini-development /usr/local/etc/php/php.ini
 
-RUN test "$PHP" = "7.0" || pecl install xdebug-2.8.1
+RUN test "$PHP" = "7.0" || pecl install xdebug-2.8.1 # 2.9.8 available
 RUN test "$PHP" != "7.0" || pecl install xdebug
+
 RUN docker-php-ext-enable xdebug
 
 # install dependencies and cleanup (needs to be one step, as else it will cache in the layer)
@@ -29,7 +27,8 @@ RUN apt-get update -y \
     && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
         $RUNTIME_PACKAGE_DEPS \
         $BUILD_PACKAGE_DEPS \
-    && docker-php-ext-configure gd --with-jpeg-dir=/usr/local/ \
+    && docker-php-ext-configure gd --with-jpeg \
+    && docker-php-ext-configure zip --with-zip \
     && docker-php-ext-install -j$(nproc) $PHP_EXT_DEPS \
     && pecl install $PECL_DEPS \
     && docker-php-ext-enable $PECL_DEPS \
@@ -47,8 +46,8 @@ ENV LANGUAGE en_US:en
 ENV LC_ALL en_US.UTF-8
 
 #install dependencies
-RUN pip3 install wheel PyMySQL setuptools boto
-RUN pip3 install ansible awscli
+RUN pip3 install PyMySQL boto setuptools
+RUN pip3 install awscli
 
 # set sendmail for php to msmtp
 RUN echo "sendmail_path=/usr/bin/msmtp -t" > /usr/local/etc/php/conf.d/20-sendmail.ini
@@ -64,8 +63,11 @@ RUN ln -s /usr/local/bin/php /usr/bin/php
 WORKDIR /var/www/oxideshop
 
 # install latest composer
-RUN curl --silent --show-error https://getcomposer.org/installer | php && \
+RUN curl -LO https://getcomposer.org/download/1.10.20/composer.phar && \
+chmod +x composer.phar && \
     mv composer.phar /usr/local/bin/composer
+#RUN curl --silent --show-error https://getcomposer.org/installer | php && \
+#    mv composer.phar /usr/local/bin/composer
 
 ENV COMPOSER_ALLOW_SUPERUSER=1
 ENV COMPOSER_NO_INTERACTION=1
@@ -94,5 +96,5 @@ RUN echo date.timezone = Europe/Berlin >> /usr/local/etc/php/conf.d/timezone.ini
 COPY scripts/* /usr/local/bin/
 
 #for php < 7.1. container node must be installed that way:
-RUN curl -sL https://deb.nodesource.com/setup_13.x | bash -
+RUN curl -sL https://deb.nodesource.com/setup_14.x | bash -
 RUN apt-get install -y nodejs
