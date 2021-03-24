@@ -64,8 +64,8 @@ RUN ln -s /usr/local/bin/php /usr/bin/php
 
 WORKDIR /var/www/oxideshop
 
-# install latest composer
-RUN curl --silent --show-error https://getcomposer.org/installer | php && \
+RUN curl -LO https://getcomposer.org/download/1.10.20/composer.phar && \
+    chmod +x composer.phar && \
     mv composer.phar /usr/local/bin/composer
 
 ENV COMPOSER_ALLOW_SUPERUSER=1

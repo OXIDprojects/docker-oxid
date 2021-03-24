@@ -3,8 +3,6 @@ ARG SERVER=apache
 
 FROM php:$PHP-$SERVER
 
-#RUN curl https://sh.rustup.rs -sSf | sh -s -- -y
-
 ARG BUILD_PACKAGE_DEPS="libcurl4-openssl-dev libjpeg-dev libpng-dev libxml2-dev libzip-dev"
 
 RUN apt-get update -y \
@@ -34,13 +32,12 @@ ARG libs="libfreetype6 libjpeg62-turbo liblz4-tool libzip4"
 ARG remoteTools="rsync wget openssh-client"
 ARG fontTools="fontforge ttfautohint"
 ARG editors="less nano"
-ARG tools="$editors $fontTools $remoteTools python3-pip nvi iproute2 ack-grep unzip git default-mysql-client sudo make socat dnsutils iputils-ping netcat"
+ARG tools="$editors $fontTools $remoteTools nvi iproute2 ack-grep unzip git default-mysql-client sudo make socat dnsutils iputils-ping netcat"
 ARG RUNTIME_PACKAGE_DEPS="$libs $tools msmtp bc locales"
 
 
 ARG PHP_MEMORY_LIMIT="-1"
 
-#COPY --from=builder /go/src/github.com/alexellis/href-counter/app .
 RUN ln -s /usr/local/etc/php/php.ini-development /usr/local/etc/php/php.ini
 
 # install dependencies and cleanup (needs to be one step, as else it will cache in the layer)
@@ -60,10 +57,6 @@ ENV LC_ALL en_US.UTF-8
 ARG PECL_DEPS_ENABLE="xdebug"
 RUN docker-php-ext-enable $PECL_DEPS_ENABLE
 
-#install dependencies
-RUN pip3 install --upgrade pip
-RUN pip3 install wheel PyMySQL setuptools boto
-RUN pip3 install ansible awscli
 
 # set sendmail for php to msmtp
 RUN echo "sendmail_path=/usr/bin/msmtp -t" > /usr/local/etc/php/conf.d/20-sendmail.ini
@@ -81,10 +74,6 @@ WORKDIR /var/www/oxideshop
 # install latest composer
 RUN curl --silent --show-error https://getcomposer.org/installer | php && \
     mv composer.phar /usr/local/bin/composer
-
-#for php < 7.1. container node must be installed that way:
-RUN curl -sL https://deb.nodesource.com/setup_13.x | bash -
-RUN apt-get install -y nodejs
 
 RUN sed -i -e "s#/var/www/html#/var/www/oxideshop/source#g" /etc/apache2/sites-enabled/000-default.conf
 RUN sed -i -e "s/AllowOverride None/AllowOverride All/g" /etc/apache2/apache2.conf
@@ -110,6 +99,7 @@ COPY scripts/* /usr/local/bin/
 
 ENV COMPOSER_ALLOW_SUPERUSER=1
 ENV COMPOSER_NO_INTERACTION=1
+#removed because we can user composer 2
 #RUN composer global require hirak/prestissimo
 
 
