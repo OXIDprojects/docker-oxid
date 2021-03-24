@@ -1,4 +1,4 @@
-ARG PHP=7.1
+ARG PHP=7.4
 FROM php:$PHP-apache
 #libs: libjudy-dev need this for memprof
 ARG libs="libfreetype6 libjpeg62-turbo liblz4-tool libjudy-dev python3-dev libzip4"
@@ -17,8 +17,8 @@ ARG PHP_MEMORY_LIMIT="-1"
 
 RUN ln -s /usr/local/etc/php/php.ini-development /usr/local/etc/php/php.ini
 
-RUN test "$PHP" = "7.0" || pecl install xdebug-2.8.1 # 2.9.8 available
-RUN test "$PHP" != "7.0" || pecl install xdebug
+RUN pecl install xdebug-2.8.1 # 2.9.8 available
+
 
 RUN docker-php-ext-enable xdebug
 
