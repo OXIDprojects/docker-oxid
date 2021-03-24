@@ -45,10 +45,6 @@ ENV LANG en_US.UTF-8
 ENV LANGUAGE en_US:en
 ENV LC_ALL en_US.UTF-8
 
-#install dependencies
-RUN pip3 install PyMySQL boto setuptools
-RUN pip3 install awscli
-
 # set sendmail for php to msmtp
 RUN echo "sendmail_path=/usr/bin/msmtp -t" > /usr/local/etc/php/conf.d/20-sendmail.ini
 RUN echo "msmtp.log init" > /var/log/msmtp.log
