@@ -8,7 +8,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        php: ["7.4"]
+        php: ["7.4","8.0"]
     services:
       mysql:
         image: mysql:5.7
@@ -31,7 +31,11 @@ jobs:
     - name: service restart
       run: sudo service docker restart   
     - name: Build the OXID Docker image
-      run: docker build . --squash --file php${{ matrix.php }}/Dockerfile --build-arg PHP=${{ matrix.php }} --build-arg OXID=${{ matrix.oxid }} --tag oxidprojects/oxid-apache-php:php${{ matrix.php }}
+      run: docker build . --squash --file php${{ matrix.php }}/Dockerfile --build-arg PHP=${{ matrix.php }} --build-arg OXID=${{ matrix.oxid }} --tag oxidprojects/oxid-apache-php:${{ steps.extract_branch.outputs.branch }}-php${{ matrix.php }}
+    - name: run the image for testing in background
+      run: docker run --name oxid -d oxidprojects/oxid-apache-php:php${{ matrix.php }}
+    - name: test image
+      run: docker exec --name oxid -d oxidprojects/oxid-apache-php:php${{ matrix.php }} composer -v
     - name: Docker Login
       run: docker login -u ${{ secrets.DOCKER_HUB_USER }} -p ${{ secrets.DOCKER_HUB_PASSWORD }}
     - name: Publish oxid php${{ matrix.php }} Docker image on Docker Hub
