@@ -10,6 +10,10 @@ jobs:
       matrix:
         php: ["7.2","7.3","7,4","8.0"]
     steps:
+    - name: Extract branch name
+      shell: bash
+      run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
+      id: extract_branch
     - uses: actions/checkout@v1
     - name: enable experimental features
       run: "sudo mkdir -p /etc/docker && echo '{\"experimental\": true}' | sudo tee /etc/docker/daemon.json"
@@ -18,9 +22,8 @@ jobs:
     - name: service restart
       run: sudo service docker restart   
     - name: Build the OXID Docker image
-      run: docker build . --squash --file php${{ matrix.php }}/Dockerfile --build-arg PHP=${{ matrix.php }} --build-arg OXID=${{ matrix.oxid }} --tag oxidprojects/oxid-apache-php:next-c1-php${{ matrix.php }}
+      run: docker build . --squash --file php${{ matrix.php }}/Dockerfile --build-arg PHP=${{ matrix.php }} --build-arg OXID=${{ matrix.oxid }} --tag oxidprojects/oxid-apache-php:php${{ matrix.php }}
     - name: Docker Login
       run: docker login -u ${{ secrets.DOCKER_HUB_USER }} -p ${{ secrets.DOCKER_HUB_PASSWORD }}
     - name: Publish oxid php${{ matrix.php }} Docker image on Docker Hub
-      run: docker push oxidprojects/oxid-apache-php:php${{ matrix.php }}
-      if: github.ref == 'refs/heads/master'
+      run: docker push oxidprojects/oxid-apache-php:${{ steps.extract_branch.outputs.branch }}-php${{ matrix.php }}
