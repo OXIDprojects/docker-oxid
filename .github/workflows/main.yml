@@ -30,12 +30,18 @@ jobs:
       run: "mkdir -p ~/.docker && echo '{\"experimental\": \"enabled\"}' | tee ~/.docker/config.json"
     - name: service restart
       run: sudo service docker restart   
+    - name: Build the PHP Docker image with extensions
+      run: docker build . --squash --file extensions/php${{ matrix.php }}/Dockerfile --build-arg PHP=${{ matrix.php }} --tag oxidprojects/oxid-apache-php:plain-${{ steps.extract_branch.outputs.branch }}-php${{ matrix.php }}
+    - name: Build the PHP Docker image with composer
+      run: docker build . --squash --file composer/Dockerfile --build-arg FROM=oxidprojects/oxid-apache-php:plain-${{ steps.extract_branch.outputs.branch }}-php${{ matrix.php }} --build-arg PHP=${{ matrix.php }} --tag oxidprojects/oxid-apache-php:composer-${{ steps.extract_branch.outputs.branch }}-php${{ matrix.php }}
     - name: Build the OXID Docker image
-      run: docker build . --squash --file php${{ matrix.php }}/Dockerfile --build-arg PHP=${{ matrix.php }} --tag oxidprojects/oxid-apache-php:${{ steps.extract_branch.outputs.branch }}-php${{ matrix.php }}
+      run: docker build . --squash --file tools/Dockerfile --build-arg FROM=oxidprojects/oxid-apache-php:composer-${{ steps.extract_branch.outputs.branch }}-php${{ matrix.php }} --build-arg PHP=${{ matrix.php }} --tag oxidprojects/oxid-apache-php:${{ steps.extract_branch.outputs.branch }}-php${{ matrix.php }}
     - name: run the image for testing in background
       run: docker run --name oxid -d oxidprojects/oxid-apache-php:${{ steps.extract_branch.outputs.branch }}-php${{ matrix.php }}
     - name: test image
       run: docker exec oxid composer -v
+    - name: install oxid
+      run: docker exec oxid composer create-project --no-dev oxid-esales/oxideshop-project your_project_name dev-b-6.2-ce
     - name: Docker Login
       run: docker login -u ${{ secrets.DOCKER_HUB_USER }} -p ${{ secrets.DOCKER_HUB_PASSWORD }}
     - name: Publish oxid php${{ matrix.php }} Docker image on Docker Hub
