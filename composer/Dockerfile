@@ -2,7 +2,7 @@ ARG FROM
 FROM $FROM
 
 # install composer
-RUN curl -LO https://getcomposer.org/download/2.0.11/composer.phar && \
+RUN curl -LO https://getcomposer.org/download/1.10.20/composer.phar && \
     chmod +x composer.phar && \
     mv composer.phar /usr/local/bin/composer
 
