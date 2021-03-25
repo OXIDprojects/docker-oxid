@@ -14,7 +14,7 @@ RUN apt-get update -y \
 
 RUN docker-php-source extract
 RUN docker-php-ext-configure zip
-RUN docker-php-ext-configure gd --with-jpeg=/usr/local/
+RUN docker-php-ext-configure gd --with-jpeg-dir=/usr/local/
 
 #curl json mbstring only needed for php < 8
 ARG PHP_EXT_DEPS="curl json xml mbstring zip bcmath soap pdo_mysql gd mysqli exif opcache"
