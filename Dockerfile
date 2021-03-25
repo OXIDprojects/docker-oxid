@@ -2,17 +2,17 @@
 ARG PHP=7.1
 FROM php:$PHP-apache
 #libs: libjudy-dev need this for memprof
-ARG libs="libfreetype6 libjpeg62-turbo liblz4-tool libjudy-dev"
+ARG libs="libfreetype6 libjpeg62-turbo liblz4-tool libjudy-dev libssh2-1"
 ARG remoteTools="rsync wget openssh-client"
 ARG fontTools="fontforge ttfautohint"
 ARG editors="less nano"
 ARG tools="$editors $fontTools $remoteTools python3-pip nvi iproute2 ack-grep unzip git default-mysql-client sudo make socat dnsutils iputils-ping netcat"
 ARG RUNTIME_PACKAGE_DEPS="$libs $tools msmtp bc locales"
 
-ARG BUILD_PACKAGE_DEPS="libcurl4-openssl-dev libjpeg-dev libpng-dev libxml2-dev libzip-dev"
+ARG BUILD_PACKAGE_DEPS="libcurl4-openssl-dev libjpeg-dev libpng-dev libxml2-dev libzip-dev libssh2-1-dev"
 
-ARG PHP_EXT_DEPS="curl json xml mbstring zip bcmath soap pdo_mysql gd mysqli"
-ARG PECL_DEPS="memprof xdebug"
+ARG PHP_EXT_DEPS="curl json xml mbstring zip bcmath soap pdo_mysql gd mysqli "
+ARG PECL_DEPS="memprof ssh2-1.2"
 ARG PHP_MEMORY_LIMIT="-1"
 
 
@@ -31,7 +31,7 @@ RUN apt-get update -y \
         $BUILD_PACKAGE_DEPS \
     && docker-php-ext-configure gd --with-jpeg-dir=/usr/local/ \
     && docker-php-ext-install -j$(nproc) $PHP_EXT_DEPS \
-    && pecl install $PECL_DEPS \
+    && pecl install $PECL_DEPS <<<'' \
     && docker-php-ext-enable $PECL_DEPS \
     && docker-php-source delete \
     && apt-get clean \
