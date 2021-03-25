@@ -9,33 +9,26 @@ ARG libs="libfreetype6 libjpeg62-turbo liblz4-tool libzip4 libjudydebian1"
 #libjudy-dev need this for memprof
 #libzip4 need this to enable extensions
 ARG BUILD_PACKAGE_DEPS="libzip-dev libcurl4-openssl-dev libjpeg-dev libpng-dev libxml2-dev libonig-dev libssl-dev libjudy-dev"
-
-RUN apt-get update -y \
-    && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends $BUILD_PACKAGE_DEPS $libs
-
-RUN docker-php-source extract
-RUN docker-php-ext-configure zip
-RUN docker-php-ext-configure gd --with-jpeg=/usr/local/
-
 #without core modules like json,curl because they are already part of php 8 see https://github.com/docker-library/php/issues/102 and https://github.com/docker-library/php/issues/1049
 ARG PHP_EXT_DEPS="xml zip bcmath soap pdo_mysql gd mysqli exif opcache"
 
-RUN docker-php-ext-install -j$(nproc) $PHP_EXT_DEPS
-
 #php8 compatible xdebug is xdebug-3.0
 ARG PECL_DEPS_INSTALL="memprof xdebug"
-RUN pecl install $PECL_DEPS_INSTALL
-
-RUN docker-php-source delete
-RUN apt-get purge -y --auto-remove $BUILD_PACKAGE_DEPS
-
-############################## END OF PHP BUILD JOB #######################
-
-RUN ln -s /usr/local/etc/php/php.ini-development /usr/local/etc/php/php.ini
 ARG PHP_MEMORY_LIMIT="-1"
+
+RUN apt-get update -y \
+    && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends $BUILD_PACKAGE_DEPS $libs \
+    && docker-php-source extract \
+    && docker-php-ext-configure zip \
+    && docker-php-ext-configure gd --with-jpeg=/usr/local/ \
+    && docker-php-ext-install -j$(nproc) $PHP_EXT_DEPS \
+    && pecl install $PECL_DEPS_INSTALL \
+    && docker-php-source delete \
+    && apt-get purge -y --auto-remove $BUILD_PACKAGE_DEPS
 
 ARG PECL_DEPS_ENABLE="memprof xdebug"
 RUN docker-php-ext-enable $PECL_DEPS_ENABLE
+RUN ln -s /usr/local/etc/php/php.ini-development /usr/local/etc/php/php.ini
 
 # remove memory limit
 RUN echo "memory_limit = $PHP_MEMORY_LIMIT" > /usr/local/etc/php/conf.d/memory-limit-php.ini

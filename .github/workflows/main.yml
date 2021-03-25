@@ -8,7 +8,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        php: ["7.2","7.3","7.4"]
+        php: ["7.2","7.3","7.4","8.0"]
     services:
       mysql:
         image: mysql:5.7
@@ -41,7 +41,7 @@ jobs:
     - name: test image
       run: docker exec oxid composer -v
     - name: install oxid
-      run: docker exec oxid composer create-project --no-dev oxid-esales/oxideshop-project . dev-b-6.2-ce
+      run: docker exec oxid composer create-project --no-dev oxid-esales/oxideshop-project . dev-b-6.3-ce
     - name: Docker Login
       run: docker login -u ${{ secrets.DOCKER_HUB_USER }} -p ${{ secrets.DOCKER_HUB_PASSWORD }}
     - name: Publish oxid php${{ matrix.php }} Docker image on Docker Hub
