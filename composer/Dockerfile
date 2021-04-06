@@ -7,7 +7,7 @@ RUN curl -LO https://getcomposer.org/download/2.0.11/composer.phar && \
     mv composer.phar /usr/local/bin/composer
 
 # install phive
-RUN wget -O phive.phar "https://phar.io/releases/phive.phar" && \
+RUN curl -LO phive.phar "https://phar.io/releases/phive.phar" && \
     chmod +x phive.phar && \
     mv phive.phar /usr/local/bin/phive
 
