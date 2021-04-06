@@ -5,7 +5,8 @@ ARG libs="libfreetype6 libjpeg62-turbo liblz4-tool libzip4"
 ARG remoteTools="rsync wget openssh-client"
 ARG fontTools="fontforge ttfautohint"
 ARG editors="less nano"
-ARG tools="$editors $fontTools $remoteTools nvi iproute2 ack-grep unzip git default-mysql-client sudo make socat dnsutils iputils-ping netcat"
+#gnupg needed by phive to install other php tools
+ARG tools="$editors $fontTools $remoteTools nvi iproute2 ack-grep unzip git default-mysql-client sudo make socat dnsutils iputils-ping netcat gnupg"
 ARG RUNTIME_PACKAGE_DEPS="$libs $tools msmtp bc locales"
 
 
