@@ -2,12 +2,12 @@ ARG FROM
 FROM $FROM
 
 # install composer
-RUN curl -LO https://getcomposer.org/download/2.0.11/composer.phar && \
+RUN curl -LO https://getcomposer.org/download/2.0.12/composer.phar && \
     chmod +x composer.phar && \
     mv composer.phar /usr/local/bin/composer
 
 # install phive
-RUN curl -LO phive.phar "https://phar.io/releases/phive.phar" && \
+RUN curl -LO https://phar.io/releases/phive.phar && \
     chmod +x phive.phar && \
     mv phive.phar /usr/local/bin/phive
 
