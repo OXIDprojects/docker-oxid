@@ -4,7 +4,8 @@ FROM php:$PHP-apache
 
 #libs:
 #libzip4 need this to enable extensions
-ARG libs="libfreetype6 libjpeg62-turbo liblz4-tool libzip4 libjudydebian1 libmemcached11 zlib1g"
+#libmemcached-libs zlib libmemcachedutil2 for memcached
+ARG libs="libfreetype6 libjpeg62-turbo liblz4-tool libzip4 libjudydebian1 libmemcached11 zlib1g libmemcachedutil2"
 
 #libjudy-dev need this for memprof
 ARG BUILD_PACKAGE_DEPS="libzip-dev libcurl4-openssl-dev libjpeg-dev libpng-dev libxml2-dev libonig-dev libssl-dev libjudy-dev zlib1g-dev libmemcached-dev"
