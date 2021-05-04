@@ -4,16 +4,18 @@ FROM php:$PHP-apache
 
 #libs:
 #libzip4 need this to enable extensions
-ARG libs="libfreetype6 libjpeg62-turbo liblz4-tool libzip4 libjudydebian1"
+#libmemcached-libs zlib for memcached
+ARG libs="libfreetype6 libjpeg62-turbo liblz4-tool libzip4 libjudydebian1 libmemcached11 zlib1g"
 
 #libjudy-dev need this for memprof
 #libzip4 need this to enable extensions
-ARG BUILD_PACKAGE_DEPS="libzip-dev libcurl4-openssl-dev libjpeg-dev libpng-dev libxml2-dev libonig-dev libssl-dev libjudy-dev"
+#zlib-dev libmemcached-dev cyrus-sasl-dev for memcached
+ARG BUILD_PACKAGE_DEPS="libzip-dev libcurl4-openssl-dev libjpeg-dev libpng-dev libxml2-dev libonig-dev libssl-dev libjudy-dev zlib1g-dev libmemcached-dev"
 #without core modules like json,curl because they are already part of php 8 see https://github.com/docker-library/php/issues/102 and https://github.com/docker-library/php/issues/1049
 ARG PHP_EXT_DEPS="xml zip bcmath soap pdo_mysql gd mysqli exif opcache"
 
 #php8 compatible xdebug is xdebug-3.0
-ARG PECL_DEPS_INSTALL="memprof xdebug"
+ARG PECL_DEPS_INSTALL="memprof xdebug memcached apcu"
 ARG PHP_MEMORY_LIMIT="-1"
 
 RUN apt-get update -y \
@@ -26,7 +28,7 @@ RUN apt-get update -y \
     && docker-php-source delete \
     && apt-get purge -y --auto-remove $BUILD_PACKAGE_DEPS
 
-ARG PECL_DEPS_ENABLE="memprof xdebug"
+ARG PECL_DEPS_ENABLE="memprof xdebug memcached apcu"
 RUN docker-php-ext-enable $PECL_DEPS_ENABLE
 RUN ln -s /usr/local/etc/php/php.ini-development /usr/local/etc/php/php.ini
 
