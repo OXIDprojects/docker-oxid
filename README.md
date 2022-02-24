@@ -10,6 +10,11 @@ this is not a official oxid repository use it only for development purpose on yo
 - oxidprojects/oxid-apache-php:oxid6.4-php7.4
 - oxidprojects/oxid-apache-php:oxid6.4-php8.0
 
+### including ansible 
+
+- oxidprojects/oxid-apache-php:ansibleoxid6.4-php7.4
+- oxidprojects/oxid-apache-php:ansibleoxid6.4-php8.0
+
 ## oxid 6.3 (beta)
 
 - oxidprojects/oxid-apache-php:oxid6.3-php7.4
