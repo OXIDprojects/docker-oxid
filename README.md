@@ -1,7 +1,9 @@
 # docker-oxid
-php apache base image for oxid.
+php apache devlopment base image for oxid.
 
 this is not a official oxid repository use it only for development purpose on your own risk.
+
+DO NOT CONNECT THIS CONTAINERS TO THE NETWORK, DO NOT USE THEM TO FOR LIVE SHOPS THEY DO CONTAIN SERIUS SECURITY ISSUES BY DESIGN
 
 ## Images:
 
