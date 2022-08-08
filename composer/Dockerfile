@@ -13,6 +13,6 @@ RUN curl -LO https://phar.io/releases/phive.phar && \
 
 ENV COMPOSER_ALLOW_SUPERUSER=1
 ENV COMPOSER_NO_INTERACTION=1
-#removed prestissimo because we can user composer 2
-#RUN composer global require hirak/prestissimo
+# removed prestissimo because we can user composer 2
+# RUN composer global require hirak/prestissimo
 
