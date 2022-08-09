@@ -41,7 +41,7 @@ jobs:
     - name: test image
       run: docker exec oxid composer -v
     - name: install oxid
-      run: docker exec oxid composer create-project --no-interaction -s dev --no-dev oxid-esales/oxideshop-project . dev-b-7.0-rc-ee
+      run: docker exec oxid composer create-project --no-interaction -s dev --no-dev oxid-esales/oxideshop-project . dev-b-7.0-rc-ce
 #    - name: run oxid console
 #      run: docker exec oxid vendor/bin/oe-console
     - name: Docker Login
