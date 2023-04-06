@@ -31,11 +31,11 @@ jobs:
     - name: service restart
       run: sudo service docker restart   
     - name: Build the PHP Docker image with extensions
-      run: docker build . --squash --file extensions/php${{ matrix.php }}/Dockerfile --build-arg PHP=${{ matrix.php }} --tag oxidprojects/oxid-apache-php:plain-${{ steps.extract_branch.outputs.branch }}-php${{ matrix.php }}
+      run: docker build . --squash --file extensions/php${{ matrix.php }}/Dockerfile --build-arg PHP=${{ matrix.php }} --tag oxidprojects/oxid-apache-php:plain-${{ steps.extract_branch.outputs.branch }}-php${{ matrix.php }} --tag ghcr.io/oxidprojects/docker-oxid:plain-${{ steps.extract_branch.outputs.branch }}-php${{ matrix.php }}
     - name: Build the PHP Docker image with composer
-      run: docker build . --squash --file composer/Dockerfile --build-arg FROM=oxidprojects/oxid-apache-php:plain-${{ steps.extract_branch.outputs.branch }}-php${{ matrix.php }} --build-arg PHP=${{ matrix.php }} --tag oxidprojects/oxid-apache-php:composer-${{ steps.extract_branch.outputs.branch }}-php${{ matrix.php }}
+      run: docker build . --squash --file composer/Dockerfile --build-arg FROM=oxidprojects/oxid-apache-php:plain-${{ steps.extract_branch.outputs.branch }}-php${{ matrix.php }} --build-arg PHP=${{ matrix.php }} --tag oxidprojects/oxid-apache-php:composer-${{ steps.extract_branch.outputs.branch }}-php${{ matrix.php }} --tag ghcr.io/oxidprojects/docker-oxid:composer-${{ steps.extract_branch.outputs.branch }}-php${{ matrix.php }}
     - name: Build the OXID Docker image
-      run: docker build . --squash --file tools/Dockerfile --build-arg FROM=oxidprojects/oxid-apache-php:composer-${{ steps.extract_branch.outputs.branch }}-php${{ matrix.php }} --build-arg PHP=${{ matrix.php }} --tag oxidprojects/oxid-apache-php:${{ steps.extract_branch.outputs.branch }}-php${{ matrix.php }}
+      run: docker build . --squash --file tools/Dockerfile --build-arg FROM=oxidprojects/oxid-apache-php:composer-${{ steps.extract_branch.outputs.branch }}-php${{ matrix.php }} --build-arg PHP=${{ matrix.php }} --tag oxidprojects/oxid-apache-php:${{ steps.extract_branch.outputs.branch }}-php${{ matrix.php }} --tag ghcr.io/oxidprojects/docker-oxid:${{ steps.extract_branch.outputs.branch }}-php${{ matrix.php }}
     - name: run the image for testing in background
       run: docker run --name oxid -d oxidprojects/oxid-apache-php:${{ steps.extract_branch.outputs.branch }}-php${{ matrix.php }}
     - name: test image
