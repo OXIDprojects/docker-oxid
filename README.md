@@ -1,16 +1,30 @@
 # docker-oxid
-php apache base image for oxid.
+php apache development base image for oxid.
 
-this is not a official oxid repository use it only for development purpose on your own risk.
+this is not an official oxid repository use it only for development purpose on your own risk.
+
+DO NOT CONNECT THESE CONTAINERS TO THE NETWORK!
+
+DO NOT USE THEM TO FOR LIVE SHOPS, BECAUSE THEY DO CONTAIN SERIOUS SECURITY ISSUES BY DESIGN (OUTDATED COMPONENTS UPDATES, LOOSE FILE ACCESS)
 
 ## Images:
 
-## oxid 6.4 (beta)
+## oxid 6.5
+- oxidprojects/oxid-apache-php:oxid6.5-php7.4
+- oxidprojects/oxid-apache-php:oxid6.5-php8.0
+- oxidprojects/oxid-apache-php:oxid6.5-php8.1
+
+## oxid 6.4
 
 - oxidprojects/oxid-apache-php:oxid6.4-php7.4
 - oxidprojects/oxid-apache-php:oxid6.4-php8.0
 
-## oxid 6.3 (beta)
+### including ansible 
+
+- oxidprojects/oxid-apache-php:ansibleoxid6.4-php7.4
+- oxidprojects/oxid-apache-php:ansibleoxid6.4-php8.0
+
+## oxid 6.3
 
 - oxidprojects/oxid-apache-php:oxid6.3-php7.4
 - oxidprojects/oxid-apache-php:oxid6.3-php8.0
