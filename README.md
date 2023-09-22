@@ -9,6 +9,10 @@ DO NOT USE THEM TO FOR LIVE SHOPS, BECAUSE THEY DO CONTAIN SERIOUS SECURITY ISSU
 
 ## Images:
 
+## oxid 7.0
+- oxidprojects/oxid-apache-php:oxid7.0-php8.0
+- oxidprojects/oxid-apache-php:oxid7.0-php8.1
+
 ## oxid 6.5
 - oxidprojects/oxid-apache-php:oxid6.5-php7.4
 - oxidprojects/oxid-apache-php:oxid6.5-php8.0
@@ -19,7 +23,7 @@ DO NOT USE THEM TO FOR LIVE SHOPS, BECAUSE THEY DO CONTAIN SERIOUS SECURITY ISSU
 - oxidprojects/oxid-apache-php:oxid6.4-php7.4
 - oxidprojects/oxid-apache-php:oxid6.4-php8.0
 
-### including ansible 
+### including ansible (remark: recent version images all contain ansible by default)
 
 - oxidprojects/oxid-apache-php:ansibleoxid6.4-php7.4
 - oxidprojects/oxid-apache-php:ansibleoxid6.4-php8.0
