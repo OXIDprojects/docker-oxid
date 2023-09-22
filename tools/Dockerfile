@@ -6,7 +6,7 @@ ARG remoteTools="rsync wget openssh-client"
 ARG fontTools="fontforge ttfautohint"
 ARG editors="less nano"
 #gnupg needed by phive to install other php tools
-ARG tools="$editors $fontTools $remoteTools nvi iproute2 ack-grep unzip git default-mysql-client sudo make socat dnsutils iputils-ping netcat gnupg ansible python3-wheel"
+ARG tools="$editors $fontTools $remoteTools nvi iproute2 ack-grep unzip git default-mysql-client sudo make socat dnsutils iputils-ping netcat-openbsd gnupg ansible python3-wheel"
 ARG RUNTIME_PACKAGE_DEPS="$libs $tools msmtp bc locales"
 
 
